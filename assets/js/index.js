@@ -1,18 +1,21 @@
+'use strict';
+
 try {
   const structure1 = new NewDataStructure(
     1,
     'string',
     false,
     Symbol('foo'),
-    null
+    null,
   );
   console.log(structure1);
   // Приклад застосування ітератора:
   const [firstValue, secondValue] = structure1; // Деструктуроване присвоєння
   console.log('Destructurised assignment:', firstValue, secondValue);
 
-  console.log('Destructuring:', ...structure1);
+  console.log('Destructuring:', ...structure1); // Деструктуризація
 
+  // Цикл for..of
   for (const element of structure1) {
     console.log('Value:', element);
   }
