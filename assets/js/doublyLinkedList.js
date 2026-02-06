@@ -42,11 +42,25 @@ class DoublyLinkedList {
   // items - масив (array)
   constructor(...items) {
     this.length = 0;
+    Object.defineProperty(this, '_length', {
+      enumerable: false,
+    }); // За допомогою дескриптора властивості зробив length неперечислюваною (наприклад, для for..in)
     this.head = null;
     this.tail = null;
     for (const item of items) {
       this.push(item);
     }
+  }
+  set length(value) {
+    if (typeof value !== 'number') {
+      throw new TypeError('length must be a number value');
+    } else if (!Number.isSafeInteger(value) || value < 0) {
+      throw new RangeError('length must be a safe, non-negative integer');
+    }
+    this._length = value;
+  }
+  get length() {
+    return this._length;
   }
   // Спочатку треба обмінятись посиланнями, а потім - стати хвостом
   push(item) {
