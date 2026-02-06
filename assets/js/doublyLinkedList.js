@@ -1,18 +1,23 @@
+// Клас конкретного елемента списку
+// Складно було придумати, яку саме валідацію додати до елемента списку (ноди), тому просто додав перевірку на undefined
 class ListNode {
   constructor(data) {
     this.data = data;
     this.prev = null;
     this.next = null;
   }
+  set data(value) {
+    if (value === undefined) {
+      throw new TypeError('Node data cannot be undefined');
+    }
+    this._data = value;
+  }
   get data() {
     return this._data;
   }
-  set data(value) {
-    // Перевірка даних
-    this._data = value;
-  }
 }
 
+// Клас ітератора списку
 class DoublyLinkedListIterator {
   constructor(list) {
     this.list = list;
@@ -32,6 +37,7 @@ class DoublyLinkedListIterator {
   }
 }
 
+// Клас самого списку
 class DoublyLinkedList {
   // items - масив (array)
   constructor(...items) {
@@ -55,9 +61,70 @@ class DoublyLinkedList {
       listNode.prev = this.tail; // Посилання prev у НАСТУПНОГО елемента (listNode) змінюється на ПОТОЧНИЙ ХВІСТ (this.tail)
       this.tail = listNode; // ПОТОЧНИЙ хвіст змінюється на НАСТУПНИЙ елемент (listNode);
     }
-    return ++this.length;
+    return ++this.length; // Повертаємо довжину після додавання елемента
   }
-  // Метод можна так само реалізувати, перебираючи з tail, або навіть одночасно (хоча складніше буде)
+  // Метод шукає перший З ПОЧАТКУ елемент і видаляє його
+  // Можна зробити аналог для видалення першого з кінця (tail)
+  deleteItem(data) {
+    if (!this.head) return; // Список порожній
+    if (this.head.data === data) {
+      // Якщо видаляється перший елемент
+      this.head = this.head.next;
+      this.head.prev = null;
+      return --this.length; // Повертаємо довжину після видалення елемента
+    } else if (this.tail.data === data) {
+      // Якщо видаляється останній елемент
+      this.tail = this.tail.prev;
+      this.tail.next = null;
+      return --this.length; // Повертаємо довжину після видалення елемента
+    }
+    let current = this.head;
+    // Цикл перебору: Якщо вузол існує і його дані дорівнюють аргументу
+    while (current && current.data !== data) {
+      current = current.next;
+    }
+    // Якщо співпадіння знайдено (current !== null)
+    if (current) {
+      current.prev.next = current.next;
+      current.next.prev = current.prev;
+      current = current.next;
+      return --this.length; // Повертаємо довжину після видалення елемента
+    }
+  }
+  addNthElement(data, position) {
+    const newNode = new ListNode(data);
+
+    if (position === 0) {
+      // Додати на початок (назначити головою й посунути попередню)
+      newNode.next = this.head;
+      this.head.prev = newNode;
+      this.head = newNode;
+      return ++this.length; // Повертаємо довжину після додавання елемента
+    } else if (position === this.length) {
+      newNode.prev = this.tail;
+      this.tail.next = newNode;
+      this.tail = newNode;
+      return ++this.length; // Повертаємо довжину після додавання елемента
+    }
+
+    let current = this.head;
+    let index = 0;
+    // Якщо current (спочатку - голова) існує - перебираємо
+    // список по посиланням next, збільшуючи індекс з кожним переходом
+    while (current && index < position - 1) {
+      current = current.next;
+      index++;
+    }
+    // Якщо співпадіння знайдено - додаємо елемент вказаної позиції
+    if (current) {
+      newNode.next = current.next;
+      newNode.prev = current;
+      current.next.prev = newNode;
+      current.next = newNode;
+      return ++this.length; // Повертаємо довжину після додавання елемента
+    }
+  }
+  // Метод для виведення списку в читабельному вигляді
   printList() {
     let current = this.head;
     const result = [];
@@ -72,4 +139,5 @@ class DoublyLinkedList {
   [Symbol.iterator]() {
     return new DoublyLinkedListIterator(this);
   }
+  // Наскільки я розумію, тут можна додати ще один паттерн перебору, ще один ітератор (тобто новий клас), але який перебирає з tail
 }
