@@ -40,6 +40,19 @@ try {
     null,
   );
   console.log(structure1);
+
+  // Завдання 3*
+
+  // Приклад застосування ітератора:
+  const [firstValue, secondValue] = structure1; // Деструктуроване присвоєння
+  console.log('Destructurised assignment:', firstValue, secondValue);
+
+  console.log('Destructuring:', ...structure1); // Деструктуризація
+
+  // Цикл for..of
+  for (const element of structure1) {
+    console.log('Value:', element);
+  }
 } catch (error) {
   console.log(error);
 }

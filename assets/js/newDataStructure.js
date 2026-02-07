@@ -1,3 +1,22 @@
+class NewDataStructureIterator {
+  constructor(structure) {
+    this.structure = structure;
+    this.index = 1;
+  }
+  next() {
+    if (this.index < this.structure.length + 1) {
+      return {
+        value: this.structure[`*${this.index++}*`],
+        done: false,
+      };
+    }
+    return {
+      value: undefined,
+      done: true,
+    };
+  }
+}
+
 class NewDataStructure {
   constructor() {
     this.length = 0;
@@ -23,5 +42,8 @@ class NewDataStructure {
   push(item) {
     this[`*${++this.length}*`] = item;
     return this.length;
+  }
+  [Symbol.iterator]() {
+    return new NewDataStructureIterator(this);
   }
 }
