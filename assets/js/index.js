@@ -1,4 +1,6 @@
 'use strict';
+// Завдання 1
+
 // Приклад використання DoublyLinkedList
 
 try {
@@ -23,6 +25,21 @@ try {
   for (const element of list1) {
     console.log(element);
   }
+} catch (error) {
+  console.log(error);
+}
+
+// Завдання 2
+
+try {
+  const structure1 = new NewDataStructure(
+    1,
+    'string',
+    false,
+    Symbol('foo'),
+    null,
+  );
+  console.log(structure1);
 } catch (error) {
   console.log(error);
 }
