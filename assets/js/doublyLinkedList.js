@@ -52,11 +52,8 @@ class DoublyLinkedList {
     }
   }
   set length(value) {
-    if (typeof value !== 'number') {
-      throw new TypeError('length must be a number value');
-    } else if (!Number.isSafeInteger(value) || value < 0) {
-      throw new RangeError('length must be a safe, non-negative integer');
-    }
+    checkType(value, 'number');
+    checkNumberRange(value, 0);
     this._length = value;
   }
   get length() {
@@ -80,17 +77,35 @@ class DoublyLinkedList {
   // Метод шукає перший З ПОЧАТКУ елемент і видаляє його
   // Можна зробити аналог для видалення першого з кінця (tail)
   deleteItem(data) {
-    if (!this.head) return; // Список порожній
+    let itemToDelete; // Змінна, яку буде повертати метод. Спеціально неініціалізована, щоб повертати undefined, якщо нічого не видаляється
+    if (!this.head) return itemToDelete; // Список порожній (можна було б і повертати нічого - теж undefined)
     if (this.head.data === data) {
-      // Якщо видаляється перший елемент
+      itemToDelete = this.head.data;
+      // Якщо видаляється єдиний елемент
+      if (this.length === 1) {
+        this.head = null;
+        this.tail = null;
+        this.length--;
+        return itemToDelete;
+      }
       this.head = this.head.next;
+      // Альтренатива того, коли видаляється єдиний елемент:
+      // if (this.head) {
+      //   this.head.prev = null;
+      // } else {
+      //   this.tail = null;
+      // }
+      // Якщо видаляється перший елемент
       this.head.prev = null;
-      return --this.length; // Повертаємо довжину після видалення елемента
+      this.length--;
+      return itemToDelete;
     } else if (this.tail.data === data) {
+      itemToDelete = this.tail.data;
       // Якщо видаляється останній елемент
       this.tail = this.tail.prev;
       this.tail.next = null;
-      return --this.length; // Повертаємо довжину після видалення елемента
+      this.length--;
+      return itemToDelete;
     }
     let current = this.head;
     // Цикл перебору: Якщо вузол існує і його дані дорівнюють аргументу
@@ -99,19 +114,31 @@ class DoublyLinkedList {
     }
     // Якщо співпадіння знайдено (current !== null)
     if (current) {
+      itemToDelete = current.data;
       current.prev.next = current.next;
       current.next.prev = current.prev;
       current = current.next;
-      return --this.length; // Повертаємо довжину після видалення елемента
+      this.length--;
+      return itemToDelete;
     }
   }
   addNthElement(data, position) {
+    checkType(position, 'number');
+    checkNumberRange(position, 0);
+    if (position > this.length) {
+      // Додаткова обробка числа, більшого за довжину списка (якщо таке вказано - елемент додається в кінець)
+      position = this.length;
+    }
     const newNode = new ListNode(data);
 
     if (position === 0) {
       // Додати на початок (назначити головою й посунути попередню)
       newNode.next = this.head;
-      this.head.prev = newNode;
+      if (this.head) {
+        this.head.prev = newNode;
+      } else {
+        this.tail = newNode;
+      }
       this.head = newNode;
       return ++this.length; // Повертаємо довжину після додавання елемента
     } else if (position === this.length) {

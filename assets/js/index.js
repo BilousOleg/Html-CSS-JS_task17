@@ -6,7 +6,7 @@
 try {
   const list1 = new DoublyLinkedList(1, 2, 3);
   list1.printList(); // 1 <-> 2 <-> 3
-  list1.deleteItem(2);
+  console.log(list1.deleteItem(2));
   list1.printList(); // 1 <-> 3
   list1.addNthElement(4, 2);
   list1.addNthElement(5, 3);
