@@ -1,6 +1,11 @@
 'use strict';
 
 function checkSequence(bracketsString, bracketsMap) {
+  checkType(bracketsString, 'string');
+  bracketsString = checkStringEmpty(bracketsString);
+  if (!bracketsMap instanceof Map) {
+    throw new TypeError('bracketsMap must be a map object');
+  }
   // Стек дужок, який буде наповнюватися та спустошуватися при необхідності (максимальний розмір стеку - довжина рядка)
   const bracketsStack = new Stack(bracketsString.length);
   // Сет закриваючих дужок для швидкого пошуку закриваючих дужок (.has в сеті)
