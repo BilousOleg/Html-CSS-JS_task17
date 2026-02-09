@@ -26,5 +26,3 @@ try {
 } catch (error) {
   console.log(error);
 }
-
-const list3 = new DoublyLinkedList();

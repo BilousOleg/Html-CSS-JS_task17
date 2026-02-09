@@ -52,11 +52,8 @@ class DoublyLinkedList {
     }
   }
   set length(value) {
-    if (typeof value !== 'number') {
-      throw new TypeError('length must be a number value');
-    } else if (!Number.isSafeInteger(value) || value < 0) {
-      throw new RangeError('length must be a safe, non-negative integer');
-    }
+    checkType(value, 'number');
+    checkNumberRange(value, 0);
     this._length = value;
   }
   get length() {
@@ -126,11 +123,9 @@ class DoublyLinkedList {
     }
   }
   addNthElement(data, position) {
-    if (typeof position !== 'number') {
-      throw new TypeError('position must be a number value');
-    } else if (!Number.isSafeInteger(position) || position < 0) {
-      throw new RangeError('position must be safe, non-negative integer');
-    } else if (position > this.length) {
+    checkType(position, 'number');
+    checkNumberRange(position, 0);
+    if (position > this.length) {
       // Додаткова обробка числа, більшого за довжину списка (якщо таке вказано - елемент додається в кінець)
       position = this.length;
     }
