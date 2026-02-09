@@ -7,11 +7,8 @@ class Stack {
     }
   }
   set maxSize(value) {
-    if (typeof value !== 'number') {
-      throw new TypeError('maxSize must be a number');
-    } else if (!Number.isSafeInteger(value) || value < 0) {
-      throw new RangeError('maxSize must be a safe, non-negative number');
-    }
+    checkType(value, 'number');
+    checkNumberRange(value, 1);
     this._maxSize = value;
   }
   get maxSize() {
