@@ -28,11 +28,8 @@ class NewDataStructure {
     }
   }
   set length(value) {
-    if (typeof value !== 'number') {
-      throw new TypeError('length must be a number');
-    } else if (!Number.isSafeInteger(value) || value < 0) {
-      throw new RangeError('length must be a safe, non-negative integer');
-    }
+    checkType(value, 'number');
+    checkNumberRange(value, 0);
     this._length = value;
   }
   get length() {
